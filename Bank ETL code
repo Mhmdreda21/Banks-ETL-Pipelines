@@ -1,0 +1,86 @@
+# banks_project.py
+
+import pandas as pd
+import numpy as np
+from datetime import datetime
+
+# -------------------------------
+# Task 1: Extract Function
+# -------------------------------
+def extract():
+    """
+    Function to extract data from Wikipedia URL
+    Returns a pandas DataFrame with bank rankings
+    """
+    url = "https://en.wikipedia.org/wiki/List_of_largest_banks"
+    df_list = pd.read_html(url)
+    
+    # الجدول الأول هو بتاع أكبر البنوك حسب Market Cap
+    df = df_list[0]
+    
+    # الاحتفاظ بالأعمدة المهمة فقط
+    df = df[['Rank', 'Bank name', 'Headquarters', 'Market cap(US$ billion)']]
+    
+    return df
+
+
+# -------------------------------
+# Task 2: Logging Function
+# -------------------------------
+def log_progress(message):
+    """
+    Function to log progress messages with timestamp
+    """
+    timestamp_format = '%Y-%m-%d %H:%M:%S'
+    now = datetime.now()
+    timestamp = now.strftime(timestamp_format)
+
+    with open("code_log.txt", "a") as f:
+        f.write(timestamp + ' : ' + message + '\n')
+
+
+# -------------------------------
+# Task 3: Transform Function
+# -------------------------------
+def transform(df):
+    """
+    Function to transform the extracted DataFrame
+    by adding Market Cap in different currencies
+    """
+    # 1. قراءة ملف exchange_rate.csv وتحويله لقاموس
+    exchange_df = pd.read_csv("exchange_rate.csv")
+    exchange_rate = dict(zip(exchange_df.iloc[:, 0], exchange_df.iloc[:, 1]))
+
+    # 2. تعديل اسم العمود
+    df = df.rename(columns={"Market cap(US$ billion)": "MC_USD_Billion"})
+
+    # 3. إضافة الأعمدة الجديدة
+    df['MC_GBP_Billion'] = [np.round(x*exchange_rate['GBP'], 2) for x in df['MC_USD_Billion']]
+    df['MC_EUR_Billion'] = [np.round(x*exchange_rate['EUR'], 2) for x in df['MC_USD_Billion']]
+    df['MC_INR_Billion'] = [np.round(x*exchange_rate['INR'], 2) for x in df['MC_USD_Billion']]
+
+    return df
+
+
+# -------------------------------
+# Main ETL Process
+# -------------------------------
+if __name__ == "__main__":
+
+    log_progress("Starting ETL process")
+
+    # Extraction
+    log_progress("Starting data extraction")
+    banks_df = extract()
+    log_progress("Data extraction complete")
+
+    # Transformation
+    log_progress("Starting data transformation")
+    transformed_df = transform(banks_df)
+    log_progress("Data transformation complete. Initiating Loading process")
+
+    # Print final dataframe
+    print(transformed_df)
+
+    # Print required quiz value
+    print("5th largest bank Market Cap in EUR (Billion):", transformed_df['MC_EUR_Billion'][4])
