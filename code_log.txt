@@ -1,0 +1,18 @@
+2025-08-24 16:48:34.912667 : ETL process started
+2025-08-24 16:51:56.099825 : ETL process started
+2025-08-24 16:52:54.089402 : ETL process started
+2025-08-24 16:53:24.703392 : ETL process started
+2025-08-24 16:58:00.905721 : ETL process started
+2025-08-24 17:02:58.832649 : ETL process started
+2025-08-24 17:03:34.925094 : ETL process started
+2025-08-24 17:03:36.590371 : Data extraction completed
+2025-08-24 17:04:35.335481 : ETL process started
+2025-08-24 17:04:36.193248 : Data extraction completed
+2025-08-24 17:05:31.045737 : ETL process started
+2025-08-24 17:05:31.963733 : Data extraction completed
+2025-08-24 17:06:52.018510 : ETL process started
+2025-08-24 17:06:52.856065 : Data extraction completed
+2025-08-24 17:06:52.894348 : Data transformation completed
+2025-08-24 17:06:52.896885 : Data saved to CSV at ./Largest_banks_data.csv
+2025-08-24 17:06:52.905573 : Data saved to Database Banks.db, table Largest_banks
+2025-08-24 17:06:52.905573 : ETL process completed
